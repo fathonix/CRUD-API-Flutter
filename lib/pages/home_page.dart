@@ -1,6 +1,6 @@
 import 'package:crud_api_app/models/product.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import '../services/product_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +12,87 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = false;
+  final nameController = TextEditingController();
+  final priceController = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey();
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    'Create Product',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      hintText: 'Redmi 3',
+                      labelText: 'Product Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: priceController,
+                    decoration: InputDecoration(
+                      hintText: '40000',
+                      labelText: 'Product Price',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      onPressed: () {},
+                      icon: Icon(Icons.save),
+                      label: Text('Save')),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _showBottomSheet();
+          },
+          child: Icon(Icons.add),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
           title: const Text('List Products'),
         ),
@@ -49,9 +127,17 @@ class _HomePageState extends State<HomePage> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(product.name!),
-                              Text(product.price.toString()),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(NumberFormat.currency(
+                                locale: 'id-ID',
+                                name: 'Rp ',
+                                decimalDigits: 0,
+                              ).format(product.price)),
                             ],
                           ),
                         ),

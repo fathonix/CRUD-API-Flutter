@@ -17,8 +17,8 @@ class Product {
     id = json['id'];
     name = json['name'];
     price = json['price'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    createdAt = DateTime.parse(json['created_at']);
+    updatedAt = DateTime.parse(json['updated_at']);
   }
 
   Map<String, dynamic> toJson() {
