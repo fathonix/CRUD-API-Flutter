@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   TextFormField(
                     controller: priceController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: '40000',
                       labelText: 'Product Price',
@@ -61,13 +62,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  ElevatedButton.icon(
+                  ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
                       onPressed: () {},
-                      icon: Icon(Icons.save),
-                      label: Text('Save')),
+                      child: Text('Save')),
                   const SizedBox(
                     height: 20,
                   ),
