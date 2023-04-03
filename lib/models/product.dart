@@ -1,0 +1,33 @@
+class Product {
+  int? id;
+  String? name;
+  int? price;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  Product({
+    this.id,
+    this.name,
+    this.price,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  Product.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    price = json['price'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['name'] = name;
+    data['price'] = price;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
+  }
+}
