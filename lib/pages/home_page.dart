@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:crud_api_app/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,63 +23,69 @@ class _HomePageState extends State<HomePage> {
       context: context,
       isScrollControlled: true,
       builder: (_) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Create Product',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+        return Padding(
+          padding: EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Create Product',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextFormField(
+                  controller: nameController,
+                  onChanged: (value) {
+                    log('Nama Product $value');
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Redmi 3',
+                    labelText: 'Product Name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  TextFormField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      hintText: 'Redmi 3',
-                      labelText: 'Product Name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: priceController,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    log('Harga Product $value');
+                  },
+                  decoration: InputDecoration(
+                    hintText: '40000',
+                    labelText: 'Product Price',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  TextFormField(
-                    controller: priceController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: '40000',
-                      labelText: 'Product Price',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
                     ),
-                  ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                      ),
-                      onPressed: () {},
-                      child: Text('Save')),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                ],
-              ),
+                    onPressed: () {},
+                    child: const Text('Save')),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
             ),
           ),
         );
       },
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
     );
@@ -90,7 +98,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             _showBottomSheet();
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(

@@ -22,14 +22,11 @@ class ProductService {
             products.add(Product.fromJson(json));
           }
           return products;
-        } else {
-          return null;
         }
-      } else {
-        return null;
       }
     } catch (e) {
       log('Error get Products $e');
+      return null;
     }
   }
 }
