@@ -29,4 +29,73 @@ class ProductService {
       return null;
     }
   }
+
+  static Future<void> createProduct({
+    required String name,
+    required String price,
+  }) async {
+    try {
+      const url = '${ApiConfig.baseUrl}/${ApiConfig.productEndpoint}';
+      final Map<String, dynamic> body = {
+        'name': name,
+        'price': price,
+      };
+      final response = await http.post(
+        Uri.parse(url),
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+        final status = responseJson['status'];
+        if (status == true) {
+          await getProducts();
+        }
+      }
+    } catch (e, st) {
+      log('Error createProduct : $e\nStacktrace : $st');
+    }
+  }
+
+  static Future<void> updateProduct({
+    required int id,
+    required String name,
+    required String price,
+  }) async {
+    try {
+      final url = '${ApiConfig.baseUrl}/${ApiConfig.productEndpoint}/$id';
+      final Map body = {
+        "name": name,
+        "price": price,
+      };
+      final response = await http.put(
+        Uri.parse(url),
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+        final status = responseJson['status'];
+        if (status == true) {
+          await getProducts();
+        }
+      }
+    } catch (e) {
+      log('Error updateProduct $e');
+    }
+  }
+
+  static Future<void> deleteProduct(int id) async {
+    try {
+      final url = '${ApiConfig.baseUrl}/${ApiConfig.productEndpoint}/$id';
+      final response = await http.delete(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+        final status = responseJson['status'];
+        if (status == true) {
+          await getProducts();
+        }
+      }
+    } catch (e) {
+      log('Error deleteProduct : $e');
+    }
+  }
 }

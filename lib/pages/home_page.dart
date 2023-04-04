@@ -13,22 +13,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool isLoading = false;
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  void _showBottomSheet() {
+  void _showAlertDialog(Product product) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Apakah kamu yakin hapus ${product.name}?'),
+        actions: [
+          ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await ProductService.deleteProduct(product.id!);
+              },
+              child: Text('Ya')),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Tidak')),
+        ],
+      ),
+    );
+  }
+
+  void _showBottomSheet({Product? product, required bool isUpdate}) {
+    if (isUpdate) {
+      nameController.text = product!.name!;
+      priceController.text = product.price!.toString();
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (_) {
         return Padding(
           padding: EdgeInsets.only(
-              top: 16,
-              left: 16,
-              right: 16,
-              bottom: MediaQuery.of(context).viewInsets.bottom),
+            top: 16,
+            left: 16,
+            right: 16,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: Form(
             key: formKey,
             child: Column(
@@ -43,6 +69,13 @@ class _HomePageState extends State<HomePage> {
                 ),
                 TextFormField(
                   controller: nameController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Nama Produk nggak boleh kosong';
+                    }
+                    return null;
+                  },
                   onChanged: (value) {
                     log('Nama Product $value');
                   },
@@ -60,6 +93,13 @@ class _HomePageState extends State<HomePage> {
                 TextFormField(
                   controller: priceController,
                   keyboardType: TextInputType.number,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Harga Produk nggak boleh kosong';
+                    }
+                    return null;
+                  },
                   onChanged: (value) {
                     log('Harga Product $value');
                   },
@@ -75,8 +115,28 @@ class _HomePageState extends State<HomePage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    onPressed: () {},
-                    child: const Text('Save')),
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        final name = nameController.text;
+                        final price = priceController.text;
+                        Navigator.of(context).pop();
+                        if (isUpdate) {
+                          await ProductService.updateProduct(
+                              id: product!.id!, name: name, price: price);
+                        } else {
+                          await ProductService.createProduct(
+                            name: name,
+                            price: price,
+                          );
+                        }
+
+                        nameController.clear();
+                        priceController.clear();
+                      } else {
+                        log('Nggak valid');
+                      }
+                    },
+                    child: Text(isUpdate ? 'Update' : 'Create')),
                 const SizedBox(
                   height: 20,
                 ),
@@ -96,7 +156,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            _showBottomSheet();
+            _showBottomSheet(isUpdate: false);
           },
           child: const Icon(Icons.add),
         ),
@@ -146,6 +206,32 @@ class _HomePageState extends State<HomePage> {
                                 name: 'Rp ',
                                 decimalDigits: 0,
                               ).format(product.price)),
+                              Row(
+                                children: [
+                                  // !TOMBOL EDIT
+                                  ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.amber),
+                                      onPressed: () {
+                                        _showBottomSheet(
+                                            isUpdate: true, product: product);
+                                      },
+                                      icon: Icon(Icons.edit),
+                                      label: Text('Edit')),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  // !TOMBOL DELETE
+                                  ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red),
+                                      onPressed: () {
+                                        _showAlertDialog(product);
+                                      },
+                                      icon: Icon(Icons.delete),
+                                      label: Text('Delete')),
+                                ],
+                              ),
                             ],
                           ),
                         ),
