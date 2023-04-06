@@ -48,7 +48,7 @@ class AuthService {
     }
   }
 
-  static Future register({
+  static Future<bool> register({
     required String name,
     required String email,
     required String password,
@@ -73,10 +73,16 @@ class AuthService {
           // ! Cache User dan token
           await SecureStorage.cacheToken(token: token);
           await SecureStorage.cacheUser(user: user);
+          return true;
+        } else {
+          return false;
         }
+      } else {
+        return false;
       }
     } catch (e) {
       log('$e');
+      return false;
     }
   }
 

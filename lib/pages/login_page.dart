@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   Text.rich(TextSpan(children: <InlineSpan>[
-                    TextSpan(
+                    const TextSpan(
                         text: 'Have\'nt Account? ',
                         style: TextStyle(
                           color: Colors.grey,
@@ -154,11 +154,11 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegisterPage(),
+                                builder: (_) => const RegisterPage(),
                               ));
                         },
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ])),
                 ],

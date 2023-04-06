@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:crud_api_app/pages/home_page.dart';
+import 'package:crud_api_app/pages/login_page.dart';
 import 'package:crud_api_app/pages/register_page.dart';
 import 'package:crud_api_app/services/auth_service.dart';
 import 'package:flutter/gestures.dart';
@@ -126,13 +127,14 @@ class _RegisterPageState extends State<RegisterPage> {
                               setState(() {
                                 _isLoading = true;
                               });
-                              final loginValid = await AuthService.login(
+                              final registerValid = await AuthService.register(
+                                  name: _nameController.text,
                                   email: _emailController.text,
                                   password: _passwordController.text);
                               setState(() {
                                 _isLoading = false;
                               });
-                              if (loginValid) {
+                              if (registerValid) {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
@@ -145,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   builder: (_) => const AlertDialog(
                                     title: Text('Error'),
                                     content: Text(
-                                        'Login tidak valid atau server error'),
+                                        'Register tidak valid atau server error'),
                                   ),
                                 );
                               }
@@ -154,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: _isLoading
                               ? const CircularProgressIndicator()
                               : Text(
-                                  'Login'.toUpperCase(),
+                                  'register'.toUpperCase(),
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -164,23 +166,23 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 20,
                   ),
                   Text.rich(TextSpan(children: <InlineSpan>[
-                    TextSpan(
-                        text: 'Have\'nt Account? ',
+                    const TextSpan(
+                        text: 'Already Account? ',
                         style: TextStyle(
                           color: Colors.grey,
                         )),
                     TextSpan(
-                      text: 'Register Now',
+                      text: 'Login',
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegisterPage(),
+                                builder: (context) => const LoginPage(),
                               ));
                         },
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ])),
                 ],
