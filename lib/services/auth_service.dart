@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:crud_api_app/constants/api_config.dart';
 import 'package:crud_api_app/locals/secure_storage.dart';
@@ -76,6 +77,29 @@ class AuthService {
       }
     } catch (e) {
       log('$e');
+    }
+  }
+
+  static Future<bool> logout() async {
+    try {
+      const url = '${ApiConfig.baseUrl}/${ApiConfig.logoutEndpoint}';
+      final token = await SecureStorage.getToken();
+      final headers = {HttpHeaders.authorizationHeader: 'Bearer $token'};
+      final response = await http.get(Uri.parse(url), headers: headers);
+      if (response.statusCode == 200) {
+        final responseJson = jsonDecode(response.body);
+        final status = responseJson['status'];
+        if (status == true) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (e) {
+      log('Error $e');
+      return false;
     }
   }
 }

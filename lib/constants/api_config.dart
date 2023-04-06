@@ -5,4 +5,5 @@ class ApiConfig {
   static const productEndpoint = 'products';
   static const loginEndpoint = 'login';
   static const registerEndpoint = 'register';
+  static const logoutEndpoint = 'logout';
 }
