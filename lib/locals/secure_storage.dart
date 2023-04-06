@@ -6,9 +6,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user.dart';
 
 class SecureStorage {
+  // ! Private Constructor
+  SecureStorage._();
+
   static const AndroidOptions _androidOptions = AndroidOptions(
     encryptedSharedPreferences: true,
   );
+
   static const _storage = FlutterSecureStorage(aOptions: _androidOptions);
 
   static const _keyUser = '_user';
@@ -18,38 +22,45 @@ class SecureStorage {
     required String token,
   }) async {
     try {
+      // !Nyimpen di storage
       await _storage.write(
-        key: _keyUser,
-        value: jsonEncode(value),
-      );
-    } catch (e) {}
-  }
-
-  Future<void> cacheUser({
-    required User user,
-  }) async {
-    try {
-      final value = {
-        'token': token,
-        'user': jsonEncode(user.toJson()),
-      };
-      await _storage.write(
-        key: _keyUser,
-        value: jsonEncode(value),
+        key: _keyToken,
+        value: token,
       );
     } catch (e) {
       log('$e');
     }
   }
 
-  Future getCredential() async {
+  Future<String?> getToken() async {
     try {
-      final data = await _storage.read(key: _keyUser);
-      if (data != null) {
-        final valJson = jsonDecode(data);
-        return valJson;
+      // ? Ambil dari local storage
+      final token = await _storage.read(
+        key: _keyToken,
+      );
+      // ? Pengecekan data null
+      if (token != null) {
+        // ? Ketika nggak null, maka kembalikan data tokennya
+        return token;
+      } else {
+        return null;
       }
     } catch (e) {
+      log('$e');
+      return null;
+    }
+  }
+
+  Future<void> cacheUser({
+    required User user,
+  }) async {
+    try {} catch (e) {
+      log('$e');
+    }
+  }
+
+  Future<User?> getUser() async {
+    try {} catch (e) {
       log('$e');
     }
   }
