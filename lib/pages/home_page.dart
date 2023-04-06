@@ -67,9 +67,9 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Create Product',
-                  style: TextStyle(
+                Text(
+                  isUpdate ? 'Update ${product!.name}' : 'Create Product',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
