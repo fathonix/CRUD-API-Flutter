@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   final nameController = TextEditingController();
   final priceController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey();
+  bool _isLoading = true;
 
   void _showAlertDialog(Product product) {
     showDialog(
@@ -25,8 +26,14 @@ class _HomePageState extends State<HomePage> {
         actions: [
           ElevatedButton(
               onPressed: () async {
+                setState(() {
+                  _isLoading = true;
+                });
                 Navigator.of(context).pop();
                 await ProductService.deleteProduct(product.id!);
+                setState(() {
+                  _isLoading = false;
+                });
               },
               child: Text('Ya')),
           ElevatedButton(
@@ -117,6 +124,9 @@ class _HomePageState extends State<HomePage> {
                     ),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
+                        setState(() {
+                          _isLoading = true;
+                        });
                         final name = nameController.text;
                         final price = priceController.text;
                         Navigator.of(context).pop();
@@ -132,6 +142,9 @@ class _HomePageState extends State<HomePage> {
                             price: price,
                           );
                         }
+                        setState(() {
+                          _isLoading = false;
+                        });
 
                         nameController.clear();
                         priceController.clear();
@@ -152,6 +165,20 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    ProductService.getProducts().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    }).onError((error, stackTrace) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    super.initState();
   }
 
   @override
