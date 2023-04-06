@@ -54,14 +54,32 @@ class SecureStorage {
   Future<void> cacheUser({
     required User user,
   }) async {
-    try {} catch (e) {
+    try {
+      final userData = jsonEncode(
+        user.toJson(),
+      );
+      await _storage.write(
+        key: _keyUser,
+        value: userData,
+      );
+    } catch (e) {
       log('$e');
     }
   }
 
   Future<User?> getUser() async {
-    try {} catch (e) {
+    try {
+      final json = await _storage.read(key: _keyUser);
+      if (json != null) {
+        final jsonValue = jsonDecode(json);
+        final user = User.fromJson(jsonValue);
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
       log('$e');
+      return null;
     }
   }
 }
