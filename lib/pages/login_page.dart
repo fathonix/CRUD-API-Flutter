@@ -127,13 +127,15 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             }
                           },
-                          child: Text(
-                            'Login'.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ))),
+                          child: _isLoading
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  'Login'.toUpperCase(),
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ))),
                 ],
               ),
             ),
