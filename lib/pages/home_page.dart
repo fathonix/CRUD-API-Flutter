@@ -193,6 +193,14 @@ class _HomePageState extends State<HomePage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         appBar: AppBar(
           title: const Text('List Products'),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.logout,
+              ),
+            ),
+          ],
         ),
         body: _isLoading
             ? const Center(
