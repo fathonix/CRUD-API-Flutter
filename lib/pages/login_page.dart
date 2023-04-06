@@ -136,6 +136,21 @@ class _LoginPageState extends State<LoginPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ))),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text.rich(TextSpan(children: <InlineSpan>[
+                    TextSpan(
+                        text: 'Have\'nt Account? ',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        )),
+                    TextSpan(
+                      text: 'Register Now',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ])),
                 ],
               ),
             ),

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:crud_api_app/models/product.dart';
+import 'package:crud_api_app/pages/login_page.dart';
+import 'package:crud_api_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/product_service.dart';
@@ -195,7 +197,42 @@ class _HomePageState extends State<HomePage> {
           title: const Text('List Products'),
           actions: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: Text('Apakah kamu yakin logout?'),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            Navigator.of(context).pop();
+                            final isLogout = await AuthService.logout();
+                            if (isLogout) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LoginPage(),
+                                  ));
+                            } else {
+                              Navigator.of(context).pop();
+                            }
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          },
+                          child: Text('Ya')),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Tidak')),
+                    ],
+                  ),
+                );
+              },
               icon: const Icon(
                 Icons.logout,
               ),
