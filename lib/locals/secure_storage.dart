@@ -18,7 +18,7 @@ class SecureStorage {
   static const _keyUser = '_user';
   static const _keyToken = '_token';
 
-  Future<void> cacheToken({
+  static Future<void> cacheToken({
     required String token,
   }) async {
     try {
@@ -32,7 +32,7 @@ class SecureStorage {
     }
   }
 
-  Future<String?> getToken() async {
+  static Future<String?> getToken() async {
     try {
       // ? Ambil dari local storage
       final token = await _storage.read(
@@ -51,7 +51,7 @@ class SecureStorage {
     }
   }
 
-  Future<void> cacheUser({
+  static Future<void> cacheUser({
     required User user,
   }) async {
     try {
@@ -67,7 +67,7 @@ class SecureStorage {
     }
   }
 
-  Future<User?> getUser() async {
+  static Future<User?> getUser() async {
     try {
       final json = await _storage.read(key: _keyUser);
       if (json != null) {
