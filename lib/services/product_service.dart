@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:crud_api_app/locals/secure_storage.dart';
 import 'package:crud_api_app/models/product.dart';
 import 'package:http/http.dart' as http;
 import '../constants/api_config.dart';
@@ -11,7 +13,15 @@ class ProductService {
   static Future<List<Product>?> getProducts() async {
     try {
       const url = '${ApiConfig.baseUrl}/${ApiConfig.productEndpoint}';
-      final response = await http.get(Uri.parse(url));
+      final token = await SecureStorage.getToken();
+
+      final header = {
+        'authorization': 'Bearer $token',
+      };
+      final response = await http.get(
+        Uri.parse(url),
+        headers: header,
+      );
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
         final status = responseJson['status'];
@@ -40,9 +50,14 @@ class ProductService {
         'name': name,
         'price': price,
       };
+      final token = await SecureStorage.getToken();
+      final header = {
+        'authorization': 'Bearer $token',
+      };
       final response = await http.post(
         Uri.parse(url),
         body: body,
+        headers: header,
       );
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
@@ -67,9 +82,14 @@ class ProductService {
         "name": name,
         "price": price,
       };
+      final token = await SecureStorage.getToken();
+      final header = {
+        'authorization': 'Bearer $token',
+      };
       final response = await http.put(
         Uri.parse(url),
         body: body,
+        headers: header,
       );
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
@@ -86,7 +106,11 @@ class ProductService {
   static Future<void> deleteProduct(int id) async {
     try {
       final url = '${ApiConfig.baseUrl}/${ApiConfig.productEndpoint}/$id';
-      final response = await http.delete(Uri.parse(url));
+      final token = await SecureStorage.getToken();
+      final header = {
+        'authorization': 'Bearer $token',
+      };
+      final response = await http.delete(Uri.parse(url), headers: header);
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
         final status = responseJson['status'];
