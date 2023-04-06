@@ -11,7 +11,7 @@ class AuthService {
   // ! Dibikin singleton biar mastiin yg dibikin program hanya 1 object yg dibuat dari class ini
   AuthService._();
 
-  static Future login({
+  static Future<bool> login({
     required String email,
     required String password,
   }) async {
@@ -34,10 +34,16 @@ class AuthService {
           // ! Cache User dan token
           await SecureStorage.cacheToken(token: token);
           await SecureStorage.cacheUser(user: user);
+          return true;
+        } else {
+          return false;
         }
+      } else {
+        return false;
       }
     } catch (e) {
       log('$e');
+      return false;
     }
   }
 

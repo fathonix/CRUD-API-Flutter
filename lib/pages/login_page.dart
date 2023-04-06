@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:crud_api_app/pages/home_page.dart';
+import 'package:crud_api_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,14 +17,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.immersiveSticky,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +68,16 @@ class _LoginPageState extends State<LoginPage> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Password tidak boleh kosong';
+                      } else if (value.length < 8) {
+                        return 'Password minimal 8';
+                      } else {
+                        return null;
+                      }
+                    },
                     decoration: InputDecoration(
                       hintText: 'Password',
                       labelText: 'Password',
@@ -92,7 +97,36 @@ class _LoginPageState extends State<LoginPage> {
                               backgroundColor: Colors.purple,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20))),
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              final loginValid = await AuthService.login(
+                                  email: _emailController.text,
+                                  password: _passwordController.text);
+                              setState(() {
+                                _isLoading = false;
+                              });
+                              if (loginValid) {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const HomePage(),
+                                    ),
+                                    (_) => false);
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => const AlertDialog(
+                                    title: Text('Error'),
+                                    content: Text(
+                                        'Login tidak valid atau server error'),
+                                  ),
+                                );
+                              }
+                            }
+                          },
                           child: Text(
                             'Login'.toUpperCase(),
                             style: const TextStyle(
