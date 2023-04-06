@@ -122,7 +122,10 @@ class _HomePageState extends State<HomePage> {
                         Navigator.of(context).pop();
                         if (isUpdate) {
                           await ProductService.updateProduct(
-                              id: product!.id!, name: name, price: price);
+                            id: product!.id!,
+                            name: name,
+                            price: price,
+                          );
                         } else {
                           await ProductService.createProduct(
                             name: name,

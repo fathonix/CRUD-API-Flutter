@@ -13,12 +13,14 @@ class Product {
     this.updatedAt,
   });
 
-  Product.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    price = json['price'];
-    createdAt = DateTime.parse(json['created_at']);
-    updatedAt = DateTime.parse(json['updated_at']);
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      name: json['name'],
+      price: json['price'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+    );
   }
 
   Map<String, dynamic> toJson() {
