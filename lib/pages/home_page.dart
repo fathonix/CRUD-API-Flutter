@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:crud_api_app/models/product.dart';
@@ -37,12 +39,12 @@ class _HomePageState extends State<HomePage> {
                   _isLoading = false;
                 });
               },
-              child: Text('Ya')),
+              child: const Text('Ya')),
           ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Tidak')),
+              child: const Text('Tidak')),
         ],
       ),
     );
@@ -201,7 +203,7 @@ class _HomePageState extends State<HomePage> {
                 showDialog(
                   context: context,
                   builder: (_) => AlertDialog(
-                    title: Text('Apakah kamu yakin logout?'),
+                    title: const Text('Apakah kamu yakin logout?'),
                     actions: [
                       ElevatedButton(
                           onPressed: () async {
@@ -214,7 +216,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => LoginPage(),
+                                    builder: (context) => const LoginPage(),
                                   ));
                             } else {
                               Navigator.of(context).pop();
@@ -223,12 +225,12 @@ class _HomePageState extends State<HomePage> {
                               _isLoading = false;
                             });
                           },
-                          child: Text('Ya')),
+                          child: const Text('Ya')),
                       ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Tidak')),
+                          child: const Text('Tidak')),
                     ],
                   ),
                 );
@@ -296,8 +298,8 @@ class _HomePageState extends State<HomePage> {
                                                   isUpdate: true,
                                                   product: product);
                                             },
-                                            icon: Icon(Icons.edit),
-                                            label: Text('Edit')),
+                                            icon: const Icon(Icons.edit),
+                                            label: const Text('Edit')),
                                         const SizedBox(
                                           width: 30,
                                         ),
@@ -308,8 +310,8 @@ class _HomePageState extends State<HomePage> {
                                             onPressed: () {
                                               _showAlertDialog(product);
                                             },
-                                            icon: Icon(Icons.delete),
-                                            label: Text('Delete')),
+                                            icon: const Icon(Icons.delete),
+                                            label: const Text('Delete')),
                                       ],
                                     ),
                                   ],

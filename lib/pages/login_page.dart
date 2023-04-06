@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:crud_api_app/pages/home_page.dart';
+import 'package:crud_api_app/pages/register_page.dart';
 import 'package:crud_api_app/services/auth_service.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
@@ -139,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Text.rich(TextSpan(children: <InlineSpan>[
+                  Text.rich(TextSpan(children: <InlineSpan>[
                     TextSpan(
                         text: 'Have\'nt Account? ',
                         style: TextStyle(
@@ -147,6 +149,14 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                     TextSpan(
                       text: 'Register Now',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage(),
+                              ));
+                        },
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
