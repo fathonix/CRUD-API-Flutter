@@ -6,4 +6,5 @@ class ApiConfig {
   static const loginEndpoint = 'login';
   static const registerEndpoint = 'register';
   static const logoutEndpoint = 'logout';
+  static const userUpdateEndpoint = 'user/update';
 }

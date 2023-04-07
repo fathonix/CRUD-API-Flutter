@@ -1,5 +1,8 @@
 import 'package:crud_api_app/locals/secure_storage.dart';
+import 'package:crud_api_app/pages/home_page.dart';
+import 'package:crud_api_app/pages/main_page.dart';
 import 'package:flutter/material.dart';
+import 'pages/login_page.dart';
 import 'routes/app_routes.dart';
 
 void main() async {
@@ -16,6 +19,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String initialRoute = '';
+  final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -26,7 +30,7 @@ class _MyAppState extends State<MyApp> {
         });
       } else {
         setState(() {
-          initialRoute = AppRoutes.homePage;
+          initialRoute = AppRoutes.mainPage;
         });
       }
     });
@@ -37,8 +41,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: initialRoute,
+      // initialRoute: initialRoute,
+      home: initialRoute == AppRoutes.mainPage
+          ? const MainPage()
+          : const LoginPage(),
       routes: AppRoutes.routes,
+      navigatorKey: _navigatorKey,
     );
   }
 }

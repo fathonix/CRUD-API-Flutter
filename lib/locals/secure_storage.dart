@@ -82,4 +82,21 @@ class SecureStorage {
       return null;
     }
   }
+
+  static Future<void> updateUser(User user) async {
+    try {
+      await _storage.delete(key: _keyUser);
+      await cacheUser(user: user);
+    } catch (e) {
+      log('$e');
+    }
+  }
+
+  static Future<void> deleteDataLokal() async {
+    try {
+      await _storage.deleteAll();
+    } catch (e) {
+      log('$e');
+    }
+  }
 }

@@ -62,9 +62,7 @@ class ProductService {
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
         final status = responseJson['status'];
-        if (status == true) {
-          await getProducts();
-        }
+        if (status == true) {}
       }
     } catch (e, st) {
       log('Error createProduct : $e\nStacktrace : $st');
@@ -94,9 +92,7 @@ class ProductService {
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
         final status = responseJson['status'];
-        if (status == true) {
-          await getProducts();
-        }
+        if (status == true) {}
       }
     } catch (e) {
       log('Error updateProduct $e');
@@ -114,9 +110,7 @@ class ProductService {
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(response.body);
         final status = responseJson['status'];
-        if (status == true) {
-          await getProducts();
-        }
+        if (status == true) {}
       }
     } catch (e) {
       log('Error deleteProduct : $e');

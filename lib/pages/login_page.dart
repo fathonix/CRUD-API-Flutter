@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:crud_api_app/pages/home_page.dart';
+import 'package:crud_api_app/pages/main_page.dart';
 import 'package:crud_api_app/pages/register_page.dart';
 import 'package:crud_api_app/services/auth_service.dart';
+import 'package:crud_api_app/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
@@ -15,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -101,20 +102,22 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(20))),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _isLoading = true;
+                              bool loginValid = false;
+
+                              await Utils.dialog(context, () async {
+                                final res = await AuthService.login(
+                                    email: _emailController.text,
+                                    password: _passwordController.text);
+                                setState(() {
+                                  loginValid = res;
+                                });
                               });
-                              final loginValid = await AuthService.login(
-                                  email: _emailController.text,
-                                  password: _passwordController.text);
-                              setState(() {
-                                _isLoading = false;
-                              });
+
                               if (loginValid) {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const HomePage(),
+                                      builder: (_) => const MainPage(),
                                     ),
                                     (_) => false);
                               } else {
@@ -129,15 +132,13 @@ class _LoginPageState extends State<LoginPage> {
                               }
                             }
                           },
-                          child: _isLoading
-                              ? const CircularProgressIndicator()
-                              : Text(
-                                  'Login'.toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ))),
+                          child: Text(
+                            'Login'.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))),
                   const SizedBox(
                     height: 20,
                   ),

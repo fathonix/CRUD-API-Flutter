@@ -2,8 +2,10 @@
 
 import 'package:crud_api_app/pages/home_page.dart';
 import 'package:crud_api_app/pages/login_page.dart';
+import 'package:crud_api_app/pages/main_page.dart';
 import 'package:crud_api_app/pages/register_page.dart';
 import 'package:crud_api_app/services/auth_service.dart';
+import 'package:crud_api_app/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
@@ -16,7 +18,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -124,21 +125,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                   borderRadius: BorderRadius.circular(20))),
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _isLoading = true;
+                              bool registerValid = false;
+
+                              await Utils.dialog(context, () async {
+                                final res = await AuthService.register(
+                                    name: _nameController.text,
+                                    email: _emailController.text,
+                                    password: _passwordController.text);
+                                setState(() {
+                                  registerValid = res;
+                                });
                               });
-                              final registerValid = await AuthService.register(
-                                  name: _nameController.text,
-                                  email: _emailController.text,
-                                  password: _passwordController.text);
-                              setState(() {
-                                _isLoading = false;
-                              });
+
                               if (registerValid) {
                                 Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (_) => const HomePage(),
+                                      builder: (_) => const MainPage(),
                                     ),
                                     (_) => false);
                               } else {
@@ -153,21 +156,19 @@ class _RegisterPageState extends State<RegisterPage> {
                               }
                             }
                           },
-                          child: _isLoading
-                              ? const CircularProgressIndicator()
-                              : Text(
-                                  'register'.toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ))),
+                          child: Text(
+                            'register'.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ))),
                   const SizedBox(
                     height: 20,
                   ),
                   Text.rich(TextSpan(children: <InlineSpan>[
                     const TextSpan(
-                        text: 'Already Account? ',
+                        text: 'Already Have Account? ',
                         style: TextStyle(
                           color: Colors.grey,
                         )),
